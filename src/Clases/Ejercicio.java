@@ -9,15 +9,15 @@ package Clases;
  *
  * @author Alejandro Correa
  */
-public class Ejercicios {
-    private int id;
-    private String name;
-    private String Link;
+public class Ejercicio {
+    int id;
+    String exercises;
+    String url;
 
-    public Ejercicios(int id, String name, String Link) {
+    public Ejercicio(int id, String name, String Link) {
         this.id = id;
-        this.name = name;
-        this.Link = Link;
+        this.exercises = name;
+        this.url = Link;
     }
 
     public int getId() {
@@ -29,19 +29,22 @@ public class Ejercicios {
     }
 
     public String getName() {
-        return name;
+        return exercises;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.exercises = name;
     }
 
     public String getLink() {
-        return Link;
+        return url;
     }
 
     public void setLink(String Link) {
-        this.Link = Link;
+        this.url = Link;
+    }
+    public String toString(){
+    return this.getName();
     }
     
     

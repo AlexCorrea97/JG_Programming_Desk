@@ -5,6 +5,7 @@
  */
 package jgprogramming;
 
+import Clases.URLs;
 import Clases.Usuario;
 import HTTP.Http;
 import java.time.LocalDateTime;
@@ -18,24 +19,44 @@ import org.apache.http.protocol.HTTP;
  *
  * @author Alejandro Correa
  */
-public class AgregarUsuario extends javax.swing.JFrame {
+public class EditUser extends javax.swing.JFrame {
 
     /**
      * Creates new form AgregarUsuario
      */
     private static List<Usuario> usuarios;
+    private static Usuario user;
 
     public void setUsers(List<Usuario> users) {
         usuarios = users;
     }
 
-    public AgregarUsuario() {
+    public EditUser() {
         initComponents();
         String directorio = System.getProperty("user.dir") + "\\src\\imagenes\\logo_unicolor.png";
         setIconImage(new ImageIcon(directorio).getImage());
         Date date = new Date();
         dtcInicio.setDate(date);
+        llenarCampos();
 
+    }
+    public static void setUser(Usuario us){
+    user=us;
+    }
+    public void llenarCampos(){
+    txtName.setText(user.getFirst_name());
+    txtApellidos.setText(user.getLast_name());
+    txtUser.setText(user.getUser_name());
+    txtPass.setText(user.getPassword());
+    
+    dtcInicio.setDate(user.getPlanning_start());
+    if(user.getTraining_type()==1){
+    rbnCross.setSelected(true);
+    }else{
+    rbnGym.setSelected(true);
+    }
+    
+    
     }
     public boolean verifCampos(){
     if(txtName.getText().equals("")||txtApellidos.equals("")||txtUser.getText().equals("")||txtPass.getText().equals("")){
@@ -119,7 +140,7 @@ public class AgregarUsuario extends javax.swing.JFrame {
         rbnCross.setSelected(true);
         rbnCross.setText("CrossFit");
 
-        btnAgregar.setText("Agregar");
+        btnAgregar.setText("Editar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
@@ -131,32 +152,31 @@ public class AgregarUsuario extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtName)
+                    .addComponent(txtApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                    .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAgregar)
-                        .addGap(98, 98, 98))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addComponent(rbnGym)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtName)
-                            .addComponent(txtApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
-                            .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
-                            .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(rbnGym)
-                                .addGap(18, 18, 18)
-                                .addComponent(rbnCross))
-                            .addComponent(dtcInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(rbnCross))
+                    .addComponent(dtcInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(86, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAgregar)
+                .addGap(170, 170, 170))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,49 +233,37 @@ public class AgregarUsuario extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         if(verifCampos()){
-            if(!txtUser.getText().contains(" ")){
-            Http http = new Http();
+        Http http = new Http();
         try {
             int plan = 0;
             if (rbnCross.isSelected()) {
                 plan = 1;
             }
-            int id = 0;
-            boolean flag = true;
-            int size = usuarios.size();
-            for (int i = 1; i <= size; i++) {
-                if (usuarios.get(i - 1).getId() != i) {
-                    id = i;
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag) {
-                id = size + 1;
-            }
-            Usuario us = new Usuario(id, txtName.getText(), txtApellidos.getText(), txtUser.getText(),
+            
+            
+            
+            Usuario us = new Usuario(user.getId(), txtName.getText(), txtApellidos.getText(), txtUser.getText(),
                     txtPass.getText(), dtcInicio.getDate(), 1, 1, plan, false, "");
-            String r = http.PostUsuario(us);
+            String r = http.GET(URLs.UpdateUserById(us));
 
-            javax.swing.JOptionPane.showMessageDialog(this, "Se agrego correctamente!", r, JOptionPane.INFORMATION_MESSAGE);
             
-            
-            if (r.equals("string")) {
-                usuarios.add(us);
+            if (r.equals("Bien")) {
                 main.llenarTable(main.tblUsers);
-                this.setVisible(false);
-                
+               javax.swing.JOptionPane.showMessageDialog(this, "Usuario Actualizado", r, JOptionPane.INFORMATION_MESSAGE); 
+               this.setVisible(false);
+
+            }
+            if (r.equals("Error")) {
+               javax.swing.JOptionPane.showMessageDialog(this, "Usuario Actualizado", r, JOptionPane.ERROR_MESSAGE); 
+
             }
         } catch (Exception e) {
             javax.swing.JOptionPane.showMessageDialog(this, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println(e.toString());
         }
-            }
-            else{
-            javax.swing.JOptionPane.showMessageDialog(this, "El nombre de usuario no pude contener un espacio vacío", "Error", JOptionPane.ERROR_MESSAGE);
-            }
         }else{
         javax.swing.JOptionPane.showMessageDialog(this, "Te falta llenar algunos campos", "Error", JOptionPane.ERROR_MESSAGE);
+        
         }
 
     }//GEN-LAST:event_btnAgregarActionPerformed
@@ -277,20 +285,21 @@ public class AgregarUsuario extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AgregarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AgregarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AgregarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AgregarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AgregarUsuario().setVisible(true);
+                new EditUser().setVisible(true);
             }
         });
     }

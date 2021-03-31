@@ -9,13 +9,13 @@ package Clases;
  *
  * @author Alejandro Correa
  */
-public class Stage {
-    private int id;
-    private String stage;
+public class Parameter {
+    int id;
+    String paramter;
 
-    public Stage(int id, String name) {
+    public Parameter(int id, String parameter) {
         this.id = id;
-        this.stage = name;
+        this.paramter = parameter;
     }
 
     public int getId() {
@@ -26,12 +26,13 @@ public class Stage {
         this.id = id;
     }
 
-    public String getName() {
-        return stage;
+    public String getParameter() {
+        return paramter;
     }
 
-    public void setName(String name) {
-        this.stage = name;
+    public void setParameter(String parameter) {
+        this.paramter = parameter;
     }
+    
     
 }

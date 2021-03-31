@@ -10,34 +10,44 @@ package Clases;
  * @author Alejandro Correa
  */
 public class EjerciciosInBox {
-   private int ejercicio_id;
-   private int repeticiones;
+   private int exercise_id;
+   private String reps;
    private int box_id;
-   private String comentario;
-   private int index_in_box;
+   private String comment;
+   private String pesos;
+   private int index_box;
 
-    public EjerciciosInBox(int ejercicio_id, int repeticiones, int box_id, String comentario, int index_in_box) {
-        this.ejercicio_id = ejercicio_id;
-        this.repeticiones = repeticiones;
+    public EjerciciosInBox(int ejercicio_id, String repeticiones, int box_id, String comentario,String pesos, int index_in_box) {
+        this.exercise_id = ejercicio_id;
+        this.reps = repeticiones;
         this.box_id = box_id;
-        this.comentario = comentario;
-        this.index_in_box = index_in_box;
+        this.comment = comentario;
+        this.index_box = index_in_box;
+        this.pesos=pesos;
     }
 
+    public String getPesos() {
+        return pesos;
+    }
+
+    public void setPesos(String pesos) {
+        this.pesos = pesos;
+    }
+    
     public int getEjercicio_id() {
-        return ejercicio_id;
+        return exercise_id;
     }
 
     public void setEjercicio_id(int ejercicio_id) {
-        this.ejercicio_id = ejercicio_id;
+        this.exercise_id = ejercicio_id;
     }
 
-    public int getRepeticiones() {
-        return repeticiones;
+    public String getRepeticiones() {
+        return reps;
     }
 
-    public void setRepeticiones(int repeticiones) {
-        this.repeticiones = repeticiones;
+    public void setRepeticiones(String repeticiones) {
+        this.reps = repeticiones;
     }
 
     public int getBox_id() {
@@ -49,19 +59,19 @@ public class EjerciciosInBox {
     }
 
     public String getComentario() {
-        return comentario;
+        return comment;
     }
 
     public void setComentario(String comentario) {
-        this.comentario = comentario;
+        this.comment = comentario;
     }
 
     public int getIndex_in_box() {
-        return index_in_box;
+        return index_box;
     }
 
     public void setIndex_in_box(int index_in_box) {
-        this.index_in_box = index_in_box;
+        this.index_box = index_in_box;
     }
    
 }

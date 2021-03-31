@@ -12,14 +12,14 @@ package Clases;
 public class UserStage {
     private int user_id;
     private int stage_id;
-    private int index_in_parameter;
+    private int index_parameter;
     private int parameter_id;
     private int week_day;
 
     public UserStage(int user_id, int stage_id, int index_in_parameter, int parameter_id, int week_day) {
         this.user_id = user_id;
         this.stage_id = stage_id;
-        this.index_in_parameter = index_in_parameter;
+        this.index_parameter = index_in_parameter;
         this.parameter_id = parameter_id;
         this.week_day = week_day;
     }
@@ -41,11 +41,11 @@ public class UserStage {
     }
 
     public int getIndex_in_parameter() {
-        return index_in_parameter;
+        return index_parameter;
     }
 
     public void setIndex_in_parameter(int index_in_parameter) {
-        this.index_in_parameter = index_in_parameter;
+        this.index_parameter = index_in_parameter;
     }
 
     public int getParameter_id() {

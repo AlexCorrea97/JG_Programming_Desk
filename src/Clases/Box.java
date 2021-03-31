@@ -11,14 +11,14 @@ package Clases;
  */
 public class Box {
     private int id;
-    private int index_in_stage;
-    private String rondas;
+    private int index_stage;
+    private String rounds;
     private int stage_id;
 
     public Box(int id, int index_in_stage, String rondas, int stage_id) {
         this.id = id;
-        this.index_in_stage = index_in_stage;
-        this.rondas = rondas;
+        this.index_stage = index_in_stage;
+        this.rounds = rondas;
         this.stage_id = stage_id;
     }
 
@@ -31,19 +31,19 @@ public class Box {
     }
 
     public int getIndex_in_stage() {
-        return index_in_stage;
+        return index_stage;
     }
 
     public void setIndex_in_stage(int index_in_stage) {
-        this.index_in_stage = index_in_stage;
+        this.index_stage = index_in_stage;
     }
 
     public String getRondas() {
-        return rondas;
+        return rounds;
     }
 
     public void setRondas(String rondas) {
-        this.rondas = rondas;
+        this.rounds = rondas;
     }
 
     public int getStage_id() {

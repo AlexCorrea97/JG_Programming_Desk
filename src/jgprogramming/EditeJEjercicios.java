@@ -5,6 +5,13 @@
  */
 package jgprogramming;
 
+import Clases.Ejercicio;
+import Clases.URLs;
+import HTTP.Http;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -17,35 +24,29 @@ public class EditeJEjercicios extends javax.swing.JFrame {
     /**
      * Creates new form AgregarEjercicios
      */
+    List<Ejercicio> ejercicios;
+
     public EditeJEjercicios() {
         initComponents();
+        String directorio = System.getProperty("user.dir") + "\\src\\imagenes\\logo_unicolor.png";
+        setIconImage(new ImageIcon(directorio).getImage());
         llenarCmb();
-        
-        
+
     }
-    
-    public void llenarCmb(){
-    String[] ejercicios= {"SQUAT SNATCH",	
-                           "POWER SNATCH",		
-                        "HANG SQUAT SNATCH",		
-                        "HANG POWER SNATCH", 		
-                        "TALL SQUAT SNATCH",
-                        "TALL POWER SNATCH",		
-                         "SLOW SQUAT SNATCH",		
-                        "SLOW POWER SNATCH",		
-                        "OVER HEAD SQUAT",		
-                            "SNATCH BALANCE",	
-                            "DEFICIT SQUAT SNATCH",		
-                        "DEFICIT POWER SNATCH",		
-                            "HIGH PULL SNATCH"		
-};
-    for(int i=0;i<ejercicios.length;i++){
-    cmbEjercicios.addItem(ejercicios[i]);
-    
-    }
-    AutoCompleteDecorator.decorate(cmbEjercicios);
-    
-    
+
+    public void llenarCmb() {
+        Http http = new Http();
+        String body = http.GET(URLs.GetEjercicios);
+        Gson gson = new Gson();
+        java.lang.reflect.Type tipoListaEjercicio = new TypeToken<List<Ejercicio>>() {
+        }.getType();
+        ejercicios = gson.fromJson(body, tipoListaEjercicio);
+        for (int i = 0; i < ejercicios.size(); i++) {
+            cmbEjercicios.addItem(ejercicios.get(i).getName());
+
+        }
+        AutoCompleteDecorator.decorate(cmbEjercicios);
+
     }
 
     /**
@@ -64,10 +65,21 @@ public class EditeJEjercicios extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         txtLink = new javax.swing.JTextField();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         cmbEjercicios.setEditable(true);
+        cmbEjercicios.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbEjerciciosItemStateChanged(evt);
+            }
+        });
+        cmbEjercicios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbEjerciciosActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Ejercicio:");
 
@@ -78,11 +90,10 @@ public class EditeJEjercicios extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Nombre: ");
+        jLabel2.setText("Nuevo nombre:");
 
         jLabel3.setText("Linkde video: ");
 
-        txtName.setEnabled(false);
         txtName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNameActionPerformed(evt);
@@ -95,12 +106,19 @@ public class EditeJEjercicios extends javax.swing.JFrame {
             }
         });
 
+        btnDelete.setText("Eliminar seleccionado");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(30, Short.MAX_VALUE)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -115,7 +133,10 @@ public class EditeJEjercicios extends javax.swing.JFrame {
                         .addGap(48, 48, 48))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnEditar)
-                        .addGap(170, 170, 170))))
+                        .addGap(179, 179, 179))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnDelete)
+                        .addGap(143, 143, 143))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,32 +153,114 @@ public class EditeJEjercicios extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEditar)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDelete)
+                .addGap(44, 44, 44))
         );
 
-        pack();
+        setSize(new java.awt.Dimension(448, 278));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-       try{
-           
-        JOptionPane.showMessageDialog(null, cmbEjercicios.getSelectedItem().toString(),"Mensaje",JOptionPane.INFORMATION_MESSAGE);
-       }catch(Exception e){
-       JOptionPane.showMessageDialog(null, "No seleccionó un ejercicio","Error",JOptionPane.ABORT);
-       
-       }    
+        if (!txtName.getText().equals("")) {
+            try {
+                Ejercicio ejercicioSelected = null;
+
+                for (Ejercicio e : ejercicios) {
+                    if (e.getName().equals(cmbEjercicios.getSelectedItem().toString())) {
+                        ejercicioSelected = e;
+                    }
+                }
+                String link = "";
+                String str = txtLink.getText();
+                boolean flag = false;
+                for (int i = 0; i < str.length(); i++) {
+
+                    if (String.valueOf(str.charAt(i)).equals("&") || String.valueOf(str.charAt(i)).equals("?")) {
+                        flag = false;
+
+                    }
+                    if (flag) {
+                        link = link + String.valueOf(str.charAt(i));
+                    }
+
+                    if (i != 0) {
+                        String param = String.valueOf(str.charAt(i - 1)) + String.valueOf(str.charAt(i));
+                        if (param.equals("v=")) {
+                            flag = true;
+                        }
+
+                    }
+
+                }
+                Http http = new Http();
+                String resp = http.GET(URLs.updateExercise(new Ejercicio(ejercicioSelected.getId(), txtName.getText().toUpperCase(), link)));
+                if (resp.equals("1")) {
+                    JOptionPane.showMessageDialog(null, "Ejercicio actualizado", "Bien", JOptionPane.INFORMATION_MESSAGE);
+                    this.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(null, resp, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+
+            }
+        } else {
+
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
-        // TODO add your handling code here:
+        txtName.setName(cmbEjercicios.getSelectedItem().toString());
     }//GEN-LAST:event_txtNameActionPerformed
 
     private void txtLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLinkActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLinkActionPerformed
+
+    private void cmbEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEjerciciosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbEjerciciosActionPerformed
+
+    private void cmbEjerciciosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbEjerciciosItemStateChanged
+        if (cmbEjercicios.getSelectedIndex() > -1) {
+            txtName.setText(ejercicios.get(cmbEjercicios.getSelectedIndex()).getName());
+            txtLink.setText(ejercicios.get(cmbEjercicios.getSelectedIndex()).getLink());
+        }
+    }//GEN-LAST:event_cmbEjerciciosItemStateChanged
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        Ejercicio ejercicioSelected = null;
+
+        for (Ejercicio e : ejercicios) {
+            if (e.getName().equals(cmbEjercicios.getSelectedItem().toString())) {
+                ejercicioSelected = e;
+            }
+        }
+        int sel = JOptionPane.showConfirmDialog(null, "¿Seguro que desea eliminar " + ejercicioSelected.getName() + "?",
+                "¿?", JOptionPane.YES_NO_OPTION);
+
+        if (sel == 0) {
+            //borrar
+            try {
+                Http http = new Http();
+
+                String r = http.GET(URLs.deleteExercise(ejercicioSelected.getId()));
+                if (r.equals("bien")) {
+                    JOptionPane.showMessageDialog(null, "Ejercicio eliminado", "Bien", JOptionPane.INFORMATION_MESSAGE);
+                    this.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(null, r, "error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.toString(), "error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -196,6 +299,7 @@ public class EditeJEjercicios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEditar;
     private javax.swing.JComboBox<String> cmbEjercicios;
     private javax.swing.JLabel jLabel1;

@@ -9,13 +9,13 @@ package Clases;
  *
  * @author Alejandro Correa
  */
-public class Stage {
+public class Format {
     private int id;
-    private String stage;
+    private String format;
 
-    public Stage(int id, String name) {
+    public Format(int id, String format) {
         this.id = id;
-        this.stage = name;
+        this.format = format;
     }
 
     public int getId() {
@@ -26,12 +26,13 @@ public class Stage {
         this.id = id;
     }
 
-    public String getName() {
-        return stage;
+    public String getFormat() {
+        return format;
     }
 
-    public void setName(String name) {
-        this.stage = name;
+    public void setFormat(String format) {
+        this.format = format;
     }
+    
     
 }
